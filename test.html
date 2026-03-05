@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Infiltration à Jérusalem</title>
+    <style>
+        :root { --primary: #fcd34d; --bg: #030712; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: white; margin: 0; padding: 20px; text-align: center; }
+        .container { max-width: 600px; margin: auto; }
+        .card { background: rgba(255,255,255,0.05); border: 2px solid var(--primary); padding: 25px; border-radius: 25px; margin-top: 30px; }
+        input { width: 90%; padding: 12px; margin: 10px 0; border-radius: 12px; border: 1px solid var(--primary); background: #000; color: white; text-align: center; }
+        .btn { width: 100%; padding: 15px; background: var(--primary); border: none; border-radius: 12px; font-weight: 900; cursor: pointer; margin-top: 15px; }
+        .role-title { color: var(--primary); font-size: 1.5rem; font-weight: 900; margin-bottom: 10px; }
+        .role-desc { font-size: 0.95rem; line-height: 1.6; opacity: 0.9; text-align: left; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 15px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="lobby">
+    <div class="card">
+        <h1>🏛️ Infiltration à Jérusalem</h1>
+        <input type="text" id="pseudo" placeholder="Ton Pseudo">
+        <input type="text" id="code" placeholder="Code Salon">
+        <button class="btn" onclick="joinSalon()">REJOINDRE LE SALON</button>
+    </div>
+</div>
+
+<div class="container hidden" id="waiting">
+    <div class="card">
+        <h2 id="room-display"></h2>
+        <p>En attente des autres Fidèles...</p>
+        <button class="btn" onclick="startInfil()">LANCER LA PARTIE 🚀</button>
+    </div>
+</div>
+
+<div class="container hidden" id="game">
+    <div class="card">
+        <div class="role-title" id="r-name"></div>
+        <div class="role-desc" id="r-desc"></div>
+        <button class="btn" onclick="location.reload()">NOUVELLE PARTIE</button>
+    </div>
+</div>
+
+<script>
+    const roleData = {
+        "Espion Romain 🏛️": "Tu es le meneur des Infiltrés. Chaque nuit, tu désignes la victime que ton camp éliminera.",
+        "Inquisiteur 🕍": "Tu participes aux éliminations nocturnes. Une fois par partie, tu peux réduire un joueur au silence pendant une journée entière.",
+        "Faux Prophète 🐍": "Tu participes aux éliminations nocturnes. Si le Sage enquête sur toi, il croira à tort que tu es un Fidèle.",
+        "Sage 📖": "Chaque nuit, tu peux découvrir le rôle d'un joueur. Attention : si tu enquêtes sur le Faux Prophète, il te trompera.",
+        "Protecteur 🛡️": "Chaque nuit, tu protèges un joueur. Tu peux te protéger toi-même, mais jamais deux nuits de suite.",
+        "Apothicaire 🧪": "Tu possèdes deux fioles : une pour sauver quelqu'un d'une attaque, une pour éliminer un suspect.",
+        "Captif Courageux 🏹": "Si tu meurs (banni ou attaqué), tu peux entraîner une personne de ton choix dans ta chute.",
+        "Diacre 👑": "Lors des votes pour bannir un suspect, ton vote compte pour deux voix.",
+        "La Pomme 🍎": "Tu lies deux joueurs. Si l'un des deux meurt, l'autre meurt automatiquement avec lui.",
+        "Fidèle 🙏": "Tu es un citoyen loyal. Observe bien les débats et vote pour démasquer les Infiltrés."
+    };
+
+    function joinSalon() {
+        if(!document.getElementById('pseudo').value || !document.getElementById('code').value) return alert("Remplis tout !");
+        document.getElementById('lobby').classList.add('hidden');
+        document.getElementById('waiting').classList.remove('hidden');
+        document.getElementById('room-display').innerText = "Salon : " + document.getElementById('code').value;
+    }
+
+    function startInfil() {
+        document.getElementById('waiting').classList.add('hidden');
+        document.getElementById('game').classList.remove('hidden');
+        
+        const rolesList = Object.keys(roleData);
+        rolesList.sort(() => Math.random() - 0.5);
+        
+        const myRole = rolesList[0];
+        document.getElementById('r-name').innerText = "RÔLE : " + myRole;
+        document.getElementById('r-desc').innerText = roleData[myRole];
+    }
+</script>
+
+</body>
+</html>
